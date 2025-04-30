@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -9,18 +9,20 @@ const BottomNav = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const hero = document.getElementById("hero");
-      const header = document.getElementById("header");
-      const bottomNav = document.getElementById("bottom-nav");
-      
-      if (!hero || !header || !bottomNav) return;
-      
-      const heroBottom = hero.getBoundingClientRect().bottom + window.scrollY;
-      const headerBottom = header.getBoundingClientRect().bottom + window.scrollY;
-      const navHeight = bottomNav.offsetHeight;
-      
-      // Fix BottomNav when it reaches the bottom of HeaderNav
-      setIsFixed(heroBottom - navHeight <= headerBottom);
+      requestAnimationFrame(() => {
+        const hero = document.getElementById("hero");
+        const header = document.getElementById("header");
+        const bottomNav = document.getElementById("bottom-nav");
+
+        if (!hero || !header || !bottomNav) return;
+
+        const heroBottom = hero.getBoundingClientRect().bottom + window.scrollY;
+        const headerBottom = header.getBoundingClientRect().bottom + window.scrollY;
+        const navHeight = bottomNav.offsetHeight;
+
+        // Fix BottomNav when it reaches the bottom of HeaderNav
+        setIsFixed(heroBottom - navHeight <= headerBottom);
+      });
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -31,24 +33,38 @@ const BottomNav = () => {
     <div
       id="bottom-nav"
       className={`w-full z-50 transition-all duration-500 ${
-        isFixed ? "fixed top-[calc(100%_-_4rem)] left-0" : "absolute bottom-0"
+        isFixed ? "fixed bottom-0 left-0" : "absolute bottom-0"
       }`}
     >
-      <motion.div className="absolute inset-0 bg-[#1B365D] opacity-35 z-[-1]" />
-      <motion.nav className="relative nav-text w-full text-white tracking-wider z-10 uppercase p-4 flex justify-around items-center shadow-md">
-        <NavItem href="/brand">Download Summit Report</NavItem>
-        <NavItem href="/calendar">Become A Sponsor</NavItem>
-        <NavItem href="/invite-only">Invite Only</NavItem>
+      {/* Background Overlay */}
+      <motion.div className="absolute inset-0 bg-[#1B365D] opacity-35 -z-10" />
+
+      {/* Navigation Menu */}
+      <motion.nav className="relative nav-text w-full text-white uppercase p-4 flex justify-around items-center shadow-md tracking-wider">
+        <NavItem href="/assets/docs/summit-report.pdf">
+          {/* Mobile line break using Tailwind's block class */}
+          <span className="block sm:inline">Download</span>{" "}
+          <span className="block sm:inline">Summit Report</span>
+        </NavItem>
+        <NavItem href="/sponsorship">
+          <span className="block sm:inline">Become A</span>{" "}
+          <span className="block sm:inline">Sponsor</span>
+        </NavItem>
+        <NavItem href="/https://atinuda.africa/membership/">
+          <span className="block sm:inline">Invite</span>{" "}
+          <span className="block sm:inline">Only</span>
+        </NavItem>
       </motion.nav>
     </div>
   );
 };
 
+// Reusable Navigation Item Component
 const NavItem: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => {
   return (
-    <Link href={href}>
+    <Link href={href} passHref>
       <motion.span
-        className="relative cursor-pointer"
+        className="relative cursor-pointer text-sm sm:text-base text-center sm:whitespace-nowrap whitespace-pre-line"
         initial={{ backgroundSize: "0% 1px" }}
         whileHover={{ backgroundSize: "100% 1px" }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -57,7 +73,7 @@ const NavItem: React.FC<{ href: string; children: React.ReactNode }> = ({ href, 
           backgroundRepeat: "no-repeat",
           backgroundPosition: "0 100%",
           backgroundSize: "0% 1px",
-          letterSpacing: '0.3em',
+          letterSpacing: "0.15em",
         }}
       >
         {children}
@@ -67,4 +83,3 @@ const NavItem: React.FC<{ href: string; children: React.ReactNode }> = ({ href, 
 };
 
 export default BottomNav;
-

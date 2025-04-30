@@ -32,7 +32,7 @@ const experiences: Experience[] = [
     title: 'Networking Dinner',
     tag: 'Invite Only',
     description: 'Good food, great company, and conversations that go beyond small talk—A table set for game-changers.',
-    image: '/assets/images/dinner.png',
+    image: '/assets/images/Dinner.png',
   },
   {
     id: 4,
@@ -93,14 +93,16 @@ const ExperienceCard = ({ data }: { data: Experience }) => {
         <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#ff7f41] text-white">
           <ArrowRight size={20} />
         </button>
-        <motion.button
-          whileHover={{ backgroundColor: '#ff7f41' }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="relative px-6 py-2 border border-gray-500 text-black nav-text font-medium uppercase overflow-hidden group"
-        >
-          <span className="relative z-10">Make a Reservation</span>
-          <span className="absolute inset-0 w-0 bg-[#ff7f41] transition-all duration-300 group-hover:w-full"></span>
-        </motion.button>
+      
+  <motion.a
+    whileHover={{ backgroundColor: "#ff7f41" }}
+    transition={{ duration: 0.3, ease: "easeInOut" }}
+    className="relative px-6 py-2 border border-gray-500 text-black nav-text font-medium uppercase overflow-hidden group"
+  >
+    <span className="relative z-10">Make a Reservation</span>
+    <span className="absolute inset-0 w-0 bg-[#ff7f41] transition-all duration-300 group-hover:w-full"></span>
+  </motion.a>
+
       </div>
     </div>
   );

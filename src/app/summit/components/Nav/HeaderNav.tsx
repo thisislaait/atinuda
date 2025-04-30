@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -11,12 +11,8 @@ const HeaderNav = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const heroHeight = document.getElementById('hero')?.offsetHeight || 600; // Default 600px if hero section not found
-      if (window.scrollY > heroHeight / 2) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      const heroHeight = document.getElementById('hero')?.offsetHeight || 600;
+      setScrolled(window.scrollY > heroHeight / 2);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -27,20 +23,43 @@ const HeaderNav = () => {
     <>
       <header
         id="header"
-        className={`fixed top-0 left-0 w-full flex justify-between items-center py-4 px-8 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white shadow-md' : 'bg-transparent'
+        className={`fixed top-0 left-0 w-full flex justify-between items-center px-8 z-50 transition-all duration-300 ${
+          scrolled ? 'bg-white shadow-md py-4' : 'bg-transparent py-8 md:py-6'
         }`}
       >
+        {/* Logo */}
         <Image 
           src={scrolled ? "/assets/images/blacklogo.png" : "/assets/images/whitelogo.png"} 
           alt="Logo" 
           width={120} 
           height={40} 
+          priority 
           className="object-contain transition-all duration-300"
         />
-        <button onClick={() => setMenuOpen(true)} className="relative text-lg font-medium tracking-wider">
+
+        {/* Menu Button */}
+        <button
+          onClick={() => setMenuOpen(true)}
+          aria-label="Open menu"
+          className="relative text-lg font-medium tracking-wider flex items-center"
+        >
+          {/* Hamburger Icon for Mobile */}
+          <div className="md:hidden flex flex-col space-y-1">
+            <span
+              className={`block w-6 h-[2px] transition-all duration-300 ${
+                scrolled ? "text-black" : "text-white"
+              } bg-current`}
+            ></span>
+            <span
+              className={`block w-6 h-[2px] transition-all duration-300 ${
+                scrolled ? "text-black" : "text-white"
+              } bg-current`}
+            ></span>
+          </div>
+
+          {/* "Menu" Text for Larger Screens */}
           <motion.span
-            className="cursor-pointer tracking-wider transition-all duration-300"
+            className="hidden md:block nav-text uppercase cursor-pointer tracking-wider transition-all duration-300 ml-2"
             initial={{ backgroundSize: '0% 1px' }}
             whileHover={{ backgroundSize: '100% 1px' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -52,13 +71,15 @@ const HeaderNav = () => {
               backgroundRepeat: 'no-repeat',
               backgroundPosition: '0 100%',
               backgroundSize: '0% 2px',
+              letterSpacing: "0.15em",
             }}
           >
-            <span className='nav-text tracking-wider' style={{ letterSpacing: '0.3em' }}>MENU</span>
+            Menu
           </motion.span>
         </button>
       </header>
 
+      {/* Fullscreen Menu */}
       {menuOpen && (
         <motion.div
           initial={{ opacity: 0, y: '-100%' }}
@@ -68,23 +89,39 @@ const HeaderNav = () => {
           className="fixed top-0 left-0 w-full h-full bg-cover bg-center flex flex-col justify-center items-end pr-20 z-50"
           style={{ backgroundImage: "url('/assets/images/menubanner.jpg')" }}
         >
-          <button onClick={() => setMenuOpen(false)} className="absolute top-6 right-10 text-lg">CLOSE</button>
-          <nav className="flex flex-col space-y-6 text-6xl h-full justify-center">
-            {['Private Membership', 'Brands Activation', 'Spark The Future 2025', 'Regional Events'].map((item, index) => (
+          {/* Close Button */}
+          <button
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+            className="absolute top-6 right-10 text-lg tracking-wider nav-text text-white uppercase"style={{ letterSpacing: '0.3em' }}
+          >
+            Close
+          </button>
+
+          {/* Navigation Menu */}
+          <nav className="flex flex-col space-y-6 text-white text-4xl header-text h-full justify-center">
+            {[
+              'Our Story',
+              'Private Membership',
+              'Brands Activation',
+              'Spark The Future 2025 - Register',
+              'Regional Events'
+            ].map((item, index) => (
               <motion.span
                 key={index}
                 initial={{ backgroundSize: '0% 1px' }}
                 whileHover={{ backgroundSize: '100% 1px' }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
                 style={{
-                  color: 'white',
                   backgroundImage: 'linear-gradient(to right, white, white)',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: '0 100%',
                   backgroundSize: '0% 1px',
                 }}
               >
-                <Link href={`/${item.toLowerCase()}`} className="block">{item}</Link>
+                <Link href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="block">
+                  {item}
+                </Link>
               </motion.span>
             ))}
           </nav>
@@ -95,4 +132,3 @@ const HeaderNav = () => {
 };
 
 export default HeaderNav;
-

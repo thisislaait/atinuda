@@ -12,6 +12,7 @@ import SummitHero from './summit/components/SummitHero';
 import AboutSummit from './summit/components/AboutSummit';
 import SummitFooter from './summit/components/SummitFooter';
 
+
 const SummitPage = () => {
   return (
     <div>
