@@ -44,7 +44,9 @@ const experiences: Experience[] = [
   },
 ];
 
+
 const ExpectSummit = () => {
+
   return (
     <section id="expect-summit" className="w-full py-16 px-8">
       {/* Section Header */}
@@ -73,6 +75,8 @@ const ExpectSummit = () => {
 };
 
 const ExperienceCard = ({ data }: { data: Experience }) => {
+  const linkHref = data.id === 1 ? "/join-the-waitlist" : "/ticket-payment";
+
   return (
     <div className="w-full md:w-1/2 bg-white shadow-lg p-6 flex flex-col gap-2">
       <Image
@@ -95,7 +99,7 @@ const ExperienceCard = ({ data }: { data: Experience }) => {
           <ArrowRight size={20} />
         </button>
       
-        <Link href="/ticket-payment" passHref>
+        <Link href={linkHref} passHref>
         <motion.a
           whileHover={{ backgroundColor: "#ff7f41" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}

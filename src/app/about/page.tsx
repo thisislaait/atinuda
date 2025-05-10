@@ -2,6 +2,11 @@
 
 import Image from 'next/image';
 import ExperienceSection from '../summit/components/ExperienceSection';
+import type { Metadata } from 'next';
+
+export const generateMetadata: Metadata = {
+  description: 'Learn more about Atinuda, an independent lifestyle management agency providing high-end experiences across culture, design, events, and influence.',
+};
 
 const AboutPage = () => {
   return (
