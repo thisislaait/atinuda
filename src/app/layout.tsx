@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 // Updated import paths to match your structure
 import Navbar from "@/app/summit/components/Nav/HeaderNav";
+import SummitFooter from "./summit/components/SummitFooter";
 
 
 export default function RootLayout({
@@ -25,6 +26,8 @@ export default function RootLayout({
         
         {/* Other sections go here */}
         {children}
+
+        <SummitFooter />
       </body>
     </html>
   );

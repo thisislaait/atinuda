@@ -24,6 +24,13 @@
 }
 
 @font-face {
+  font-family: 'DIN';
+  src: url('/assets/fonts/DIN.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Futura PT Light';
   src: url('/assets/fonts/FuturaPT-Light.ttf') format('truetype');
   font-weight: normal;
@@ -53,7 +60,7 @@
 body {
   background: #ffffff;
   color: var(--foreground);
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'DIN', sans-serif;
 }
 
 .nav-text {
@@ -69,5 +76,5 @@ body {
 }
 
 .sponsors-text{
-  font-family: 'Hanken Grotesk';
+  font-family: 'DIN';
 }
