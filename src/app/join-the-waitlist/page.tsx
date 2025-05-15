@@ -4,31 +4,6 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import type { Metadata } from 'next';
-
-export const generateMetadata: Metadata = {
-  title: 'Join the Waitlist - Atinuda Mauritius 2026',
-  description: 'Join the waitlist for Atinuda Mauritius 2026. Be the first to know when we launch.',
-  keywords: ['waitlist', 'mauritius', '2026', 'atinuda', 'luxury', 'event'],
-  openGraph: {
-    title: 'Join the Waitlist - Atinuda Mauritius 2026',
-    description: 'Join the waitlist for Atinuda Mauritius 2026. Be the first to know when we launch.',
-    url: 'https://atinuda.com/join-the-waitlist',
-    siteName: 'Atinuda',
-    images: [
-      {
-        url: 'https://atinuda.com/assets/images/mauritius.jpg', // Placeholder image, replace with actual path
-        width: 1200,
-        height: 630,
-        alt: 'Join the Waitlist - Atinuda Mauritius 2026',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-};
-
-
 const JoinWaitlist = () => {
     type FormDataType = {
         name: string;

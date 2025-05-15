@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import ExpectSummit from './components/ExpectSection';
+import Payment from './components/Payment';
 
 export const generateMetadata: Metadata = {
   title: 'Summit',
@@ -7,9 +9,9 @@ export const generateMetadata: Metadata = {
 
 export default function SummitPage() {
   return (
-    <div>
-      <h1>Summit Page</h1>
-      <p>Content for the summit page will go here.</p>
-    </div>
+    <main>
+      <ExpectSummit />
+      <Payment />
+    </main>
   );
 }

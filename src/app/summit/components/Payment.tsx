@@ -1,7 +1,7 @@
- 'use client';
+'use client';
 
 import { useState } from 'react';
-import { FlutterWaveButton, closePaymentModal } from 'flutterwave-react-v3';
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -37,6 +37,8 @@ const Payment = () => {
     },
   };
 
+  const handleFlutterPayment = useFlutterwave(config);
+
   return (
     <section className="w-full bg-white">
       {/* Banner Header */}
@@ -68,7 +70,6 @@ const Payment = () => {
             Early bird pricing ends July 1st. No refunds after purchase.
           </p>
 
-          {/* Instagram Follow Button */}
           <Link
             href="https://instagram.com/youraccount"
             target="_blank"
@@ -138,16 +139,22 @@ const Payment = () => {
               Total for <strong>{quantity}</strong> {selected} ticket(s):{' '}
               <strong>₦{totalAmount.toLocaleString()}</strong>
             </p>
-            <FlutterWaveButton
-              {...config}
-              text="Proceed to Payment"
-              className="relative px-8 py-3 border border-gray-600 text-black font-medium uppercase overflow-hidden group mt-4"
-              callback={(response) => {
-                console.log('Payment success:', response);
-                closePaymentModal();
+            <button
+              onClick={() => {
+                handleFlutterPayment({
+                  callback: (response) => {
+                    console.log('Payment success:', response);
+                    closePaymentModal(); // Close modal manually
+                  },
+                  onClose: () => {
+                    console.log('Payment closed without completing');
+                  },
+                });
               }}
-              onClose={() => console.log('Modal closed')}
-            />
+              className="relative px-8 py-3 border border-gray-600 text-black font-medium uppercase overflow-hidden group mt-4"
+            >
+              Proceed to Payment
+            </button>
           </motion.div>
         )}
       </div>

@@ -2,25 +2,19 @@
 
 import Image from 'next/image';
 import ExperienceSection from '../summit/components/ExperienceSection';
-import type { Metadata } from 'next';
-
-export const generateMetadata: Metadata = {
-  description: 'Learn more about Atinuda, an independent lifestyle management agency providing high-end experiences across culture, design, events, and influence.',
-};
-
 const AboutPage = () => {
   return (
     <div className="relative text-black">
       {/* Hero Section */}
       <div className="relative w-full h-[90vh]">
         <Image
-          src="/assets/images/Atinuda.webp"
+          src="/assets/images/AtinudaAbout.png"
           alt="About"
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black bg-opacity-60 z-10" />
+        <div className="absolute inset-0 bg-black/45 60 z-10" />
         <div className="absolute inset-0 flex items-center justify-center text-left px-6 z-20">
           <h1 className="text-white hero-text text-4xl md:text-5xl font-semibold tracking-wide max-w-4xl leading-snug">
             We’re an independent, lifestyle management agency providing high-end experiences for everyone.
