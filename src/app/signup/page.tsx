@@ -1,56 +1,60 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/app/signup/page.tsx
 'use client';
 
 import { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/firebase/config';
 import { useRouter } from 'next/navigation';
+import { auth, db } from '@/firebase/config';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
-const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function SignUp() {
   const router = useRouter();
+  const [form, setForm] = useState({ firstName: '', lastName: '', company: '', email: '', password: '' });
+  const [error, setError] = useState('');
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleChange = (e: any) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      router.push('/checkout'); // Redirect to payment page after signup
+      const { email, password, firstName, lastName, company } = form;
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      await setDoc(doc(db, 'users', res.user.uid), {
+        firstName,
+        lastName,
+        company,
+        email,
+        createdAt: new Date().toISOString(),
+      });
+      router.push('/ticket-payment');
     } catch (err: any) {
-      alert(err.message);
+      setError(err.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <form onSubmit={handleSignup} className="space-y-4 max-w-sm w-full">
-        <h2 className="text-xl font-semibold text-center">Create an Account</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          className="w-full border px-4 py-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          className="w-full border px-4 py-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="bg-[#ff7f41] text-white px-4 py-2 w-full uppercase"
-        >
-          Sign Up
-        </button>
-      </form>
+    <div className="min-h-screen bg-[#f7f7f7] flex items-center justify-center px-4">
+      <div className="max-w-xl w-full bg-white shadow-md rounded-lg p-8">
+        <h2 className="text-2xl font-bold mb-6 text-center">Create Your Atinuda Account</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex gap-4">
+            <input name="firstName" onChange={handleChange} placeholder="First Name" className="w-1/2 input" required />
+            <input name="lastName" onChange={handleChange} placeholder="Last Name" className="w-1/2 input" required />
+          </div>
+          <input name="company" onChange={handleChange} placeholder="Company" className="input" required />
+          <input name="email" type="email" onChange={handleChange} placeholder="Email" className="input" required />
+          <input name="password" type="password" onChange={handleChange} placeholder="Password" className="input" required />
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+          <button className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition">
+            Sign Up
+          </button>
+        </form>
+        <p className="mt-4 text-sm text-center">
+          Already have an account? <a href="/login" className="text-blue-600 underline">Login</a>
+        </p>
+      </div>
     </div>
   );
-};
-
-export default SignUp;
+}

@@ -5,6 +5,7 @@ import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/useAuth';
 
 const ticketOptions = [
   { type: 'Member', price: 250000, desc: 'Discounted rate for registered members.' },
@@ -38,6 +39,8 @@ const Payment = () => {
   };
 
   const handleFlutterPayment = useFlutterwave(config);
+
+  const { user, openAuthModal } = useAuth();
 
   return (
     <section className="w-full bg-white">
@@ -139,15 +142,21 @@ const Payment = () => {
               Total for <strong>{quantity}</strong> {selected} ticket(s):{' '}
               <strong>₦{totalAmount.toLocaleString()}</strong>
             </p>
+          
             <button
               onClick={() => {
+                if (!user) {
+                  openAuthModal(); // 👈 open modal
+                  return;
+                }
+
                 handleFlutterPayment({
                   callback: (response) => {
                     console.log('Payment success:', response);
-                    closePaymentModal(); // Close modal manually
+                    closePaymentModal();
                   },
                   onClose: () => {
-                    console.log('Payment closed without completing');
+                    console.log('Payment closed');
                   },
                 });
               }}
