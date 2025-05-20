@@ -31,13 +31,16 @@ const SummitFooter = () => {
         
         {/* Logo Section */}
         <section className="flex flex-col items-center">
+        <Link href="/">
           <Image 
             src="/assets/images/blacklogo.png" 
-            alt="Company Logo" 
+            alt="Logo" 
             width={120} 
-            height={50} 
+            height={40} 
             priority 
+            className="object-contain transition-all duration-300 cursor-pointer"
           />
+        </Link>
           <hr className="w-full border-black my-3" />
         </section>
 

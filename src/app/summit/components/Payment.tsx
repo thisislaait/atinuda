@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
+import AuthModal from '@/components/AuthModal';
 
 const ticketOptions = [
   { type: 'Member', price: 250000, desc: 'Discounted rate for registered members.' },
@@ -17,6 +18,8 @@ const Payment = () => {
   const [selected, setSelected] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
 
+  const { user, openAuthModal} = useAuth();
+
   const selectedTicket = ticketOptions.find((t) => t.type === selected);
   const totalAmount = selectedTicket ? selectedTicket.price * quantity : 0;
 
@@ -27,9 +30,9 @@ const Payment = () => {
     currency: 'NGN',
     payment_options: 'card,mobilemoney,ussd',
     customer: {
-      email: 'guest@example.com',
+      email: user?.email || 'guest@example.com',
       phone_number: '08012345678',
-      name: 'Atinuda Guest',
+      name: user?.displayName || 'Atinuda Guest',
     },
     customizations: {
       title: 'Atinuda Ticket',
@@ -40,11 +43,9 @@ const Payment = () => {
 
   const handleFlutterPayment = useFlutterwave(config);
 
-  const { user, openAuthModal } = useAuth();
-
   return (
     <section className="w-full bg-white">
-      {/* Banner Header */}
+      {/* Header Banner */}
       <div className="relative w-full h-[400px]">
         <Image
           src="/assets/images/Tourism2.jpg"
@@ -72,7 +73,6 @@ const Payment = () => {
           <p className="mt-4 text-sm text-gray-500">
             Early bird pricing ends July 1st. No refunds after purchase.
           </p>
-
           <Link
             href="https://instagram.com/youraccount"
             target="_blank"
@@ -85,7 +85,7 @@ const Payment = () => {
 
         <hr className="my-10 border-gray-300" />
 
-        {/* Ticket Cards */}
+        {/* Ticket Options */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {ticketOptions.map((ticket) => (
             <div
@@ -102,7 +102,9 @@ const Payment = () => {
             >
               <h3 className="text-lg text-black font-semibold mb-2">{ticket.type} Ticket</h3>
               <p className="text-sm text-[#ff7f41]">{ticket.desc}</p>
-              <p className="mt-4 text-xl font-bold text-black">₦{ticket.price.toLocaleString()}</p>
+              <p className="mt-4 text-xl font-bold text-black">
+                ₦{ticket.price.toLocaleString()}
+              </p>
 
               {selected === ticket.type && (
                 <div className="mt-4 flex items-center gap-3">
@@ -142,23 +144,22 @@ const Payment = () => {
               Total for <strong>{quantity}</strong> {selected} ticket(s):{' '}
               <strong>₦{totalAmount.toLocaleString()}</strong>
             </p>
-          
+
             <button
               onClick={() => {
                 if (!user) {
-                  openAuthModal(); // 👈 open modal
-                  return;
+                  openAuthModal(); // Opens the modal
+                } else {
+                  handleFlutterPayment({
+                    callback: (response) => {
+                      console.log('Payment success:', response);
+                      closePaymentModal();
+                    },
+                    onClose: () => {
+                      console.log('Payment closed');
+                    },
+                  });
                 }
-
-                handleFlutterPayment({
-                  callback: (response) => {
-                    console.log('Payment success:', response);
-                    closePaymentModal();
-                  },
-                  onClose: () => {
-                    console.log('Payment closed');
-                  },
-                });
               }}
               className="relative px-8 py-3 border border-gray-600 text-black font-medium uppercase overflow-hidden group mt-4"
             >
@@ -167,6 +168,9 @@ const Payment = () => {
           </motion.div>
         )}
       </div>
+
+      {/* 👇 Include the AuthModal here so it's only present on this page */}
+      <AuthModal />
     </section>
   );
 };

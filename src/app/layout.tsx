@@ -5,6 +5,7 @@ import SummitFooter from "./summit/components/SummitFooter";
 
 // 👇 import your context provider
 import { AuthProvider } from "@/context/AuthContext";
+import AuthModal from "@/components/AuthModal";
 
 export const metadata: Metadata = {
   title: "Atinuda Summit",
@@ -22,6 +23,7 @@ export default function RootLayout({
         {/* 👇 Now your entire site has access to auth context */}
         <AuthProvider>
           <Navbar />
+          <AuthModal />
           {children}
           <SummitFooter />
         </AuthProvider>

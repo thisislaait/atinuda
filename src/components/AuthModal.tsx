@@ -1,3 +1,4 @@
+// src/components/AuthModal.tsx
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -32,13 +33,13 @@ const AuthModal = () => {
   if (!isAuthModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]">
+    <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-[9999]">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="bg-white rounded-lg p-8 w-full max-w-md shadow-xl"
       >
-        <h2 className="text-xl font-bold mb-4">{isLogin ? 'Login' : 'Sign Up'}</h2>
+        <h2 className="text-xl font-bold mb-4 text-center">{isLogin ? 'Login' : 'Sign Up'}</h2>
         <input
           type="email"
           placeholder="Email"

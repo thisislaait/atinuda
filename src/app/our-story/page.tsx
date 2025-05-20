@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import ExperienceSection from '../summit/components/ExperienceSection';
+
 const AboutPage = () => {
   return (
     <div className="relative text-black">
