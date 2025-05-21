@@ -1,30 +1,75 @@
-// src/components/AuthModal.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/firebase/config';
+import { auth, db } from '@/firebase/config';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import toast, { Toaster } from 'react-hot-toast';
 
 const AuthModal = () => {
   const { isAuthModalOpen, closeAuthModal } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    company: '',
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const validateForm = () => {
+    const { firstName, lastName, email, password, company } = form;
+    if (!email || !password) return 'Email and password are required';
+    if (!isLogin && (!firstName || !lastName || !company)) return 'Please fill all fields';
+    return '';
+  };
 
   const handleAuth = async () => {
+    const error = validateForm();
+    if (error) return toast.error(error);
+
     setLoading(true);
     try {
+      const { email, password, firstName, lastName, company } = form;
+
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
+        toast.success('Login successful');
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+
+        // 🧠 Set Firebase displayName
+        await updateProfile(res.user, {
+          displayName: `${firstName} ${lastName}`,
+        });
+
+        // 📄 Store extra fields in Firestore
+        await setDoc(doc(db, 'users', res.user.uid), {
+          firstName,
+          lastName,
+          company,
+          email,
+          createdAt: new Date().toISOString(),
+        });
+
+        toast.success('Account created!');
       }
+
       closeAuthModal();
-    } catch (err) {
-      alert(err);
+    } catch (err: any) {
+      toast.error(err.message || 'Authentication failed');
     } finally {
       setLoading(false);
     }
@@ -34,33 +79,75 @@ const AuthModal = () => {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-[9999]">
+      <Toaster position="top-center" />
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="bg-white rounded-lg p-8 w-full max-w-md shadow-xl"
       >
-        <h2 className="text-xl font-bold mb-4 text-center">{isLogin ? 'Login' : 'Sign Up'}</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          onClick={handleAuth}
-          className="w-full bg-[#ff7f41] text-white py-2 rounded hover:bg-[#e66a30] transition"
-          disabled={loading}
-        >
-          {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
-        </button>
+        <h2 className="text-xl mb-4 text-center hero-text text-gray-600">
+          {isLogin ? 'Login to Atinuda' : 'Create Your Atinuda Account'}
+        </h2>
+
+        <form onSubmit={(e) => { e.preventDefault(); handleAuth(); }} className="space-y-3">
+          {!isLogin && (
+            <>
+              <div className="flex gap-3">
+                <input
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  placeholder="First Name"
+                  className="w-1/2 border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+                  required
+                />
+                <input
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  placeholder="Last Name"
+                  className="w-1/2 border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+                  required
+                />
+              </div>
+              <input
+                name="company"
+                value={form.company}
+                onChange={handleChange}
+                placeholder="Company Name"
+                className="w-full border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+                required
+              />
+            </>
+          )}
+
+          <input
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+            required
+          />
+          <input
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="Password"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+            required
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-[#ff7f41] text-white py-2 rounded hover:bg-[#e66a30] transition"
+            disabled={loading}
+          >
+            {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
+          </button>
+        </form>
 
         <p className="text-sm text-center mt-4">
           {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}

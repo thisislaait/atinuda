@@ -7,18 +7,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import AuthModal from '@/components/AuthModal';
+import router from 'next/router';
 
 const ticketOptions = [
-  { type: 'Member', price: 250000, desc: 'Discounted rate for registered members.' },
-  { type: 'Non-Member', price: 450000, desc: 'Standard access for non-members.' },
-  { type: 'VIP', price: 750000, desc: 'Front row seating, exclusive dinner invite.' },
+  { type: 'Member', price: 25, desc: 'Discounted rate for registered members.' },
+  { type: 'Non-Member', price: 450, desc: 'Standard access for non-members.' },
+  { type: 'VIP', price: 750, desc: 'Front row seating, exclusive dinner invite.' },
 ];
 
 const Payment = () => {
   const [selected, setSelected] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
 
-  const { user, openAuthModal} = useAuth();
+  const { user, openAuthModal, logout } = useAuth(); // ✅ added logout
 
   const selectedTicket = ticketOptions.find((t) => t.type === selected);
   const totalAmount = selectedTicket ? selectedTicket.price * quantity : 0;
@@ -55,7 +56,7 @@ const Payment = () => {
         />
         <div className="absolute inset-0 bg-[#1f2340]/60 z-10" />
         <div className="absolute inset-0 z-20 flex items-center justify-center">
-          <h1 className="text-4xl md:text-6xl text-white font-bold text-center">
+          <h1 className="text-4xl md:text-6xl text-white font-bold text-center hero-text">
             Reserve Your Spot at Atinuda 2025
           </h1>
         </div>
@@ -68,13 +69,13 @@ const Payment = () => {
 
         <div className="mb-8 text-gray-700">
           <p><strong>Date:</strong> October 7–9, 2025</p>
-          <p><strong>Location:</strong> Landmark Event Centre, Lagos</p>
+          <p><strong>Location:</strong> National Stadium, Lagos</p>
           <p><strong>Time:</strong> 10:00 AM – 6:00 PM Daily</p>
           <p className="mt-4 text-sm text-gray-500">
             Early bird pricing ends July 1st. No refunds after purchase.
           </p>
           <Link
-            href="https://instagram.com/youraccount"
+            href="https://instagram.com/atinuda_"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-4 text-white bg-[#ff7f41] px-5 py-2 text-sm font-semibold uppercase rounded hover:bg-[#e66a30] transition"
@@ -133,13 +134,28 @@ const Payment = () => {
           ))}
         </div>
 
-        {/* Payment Button */}
+        {/* Payment Section */}
         {selected && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
+            {/* User Info & Logout */}
+            {user && (
+              <div className="flex flex-col items-center mb-4 text-black">
+                <p className="text-sm">
+                  Signed in as <strong>{user.displayName || user.email}</strong>
+                </p>
+                <button
+                  onClick={logout}
+                  className="mt-1 text-xs text-red-500 hover:underline"
+                >
+                  Log Out
+                </button>
+              </div>
+            )}
+
             <p className="text-sm mb-4 text-black">
               Total for <strong>{quantity}</strong> {selected} ticket(s):{' '}
               <strong>₦{totalAmount.toLocaleString()}</strong>
@@ -148,16 +164,17 @@ const Payment = () => {
             <button
               onClick={() => {
                 if (!user) {
-                  openAuthModal(); // Opens the modal
+                  openAuthModal();
                 } else {
                   handleFlutterPayment({
                     callback: (response) => {
                       console.log('Payment success:', response);
                       closePaymentModal();
+                      router.push('/success'); // Create a /success page
                     },
                     onClose: () => {
-                      console.log('Payment closed');
-                    },
+                      console.log('User closed modal');
+                    }
                   });
                 }
               }}
@@ -169,10 +186,11 @@ const Payment = () => {
         )}
       </div>
 
-      {/* 👇 Include the AuthModal here so it's only present on this page */}
+      {/* Show the Auth Modal only on this page */}
       <AuthModal />
     </section>
   );
 };
 
 export default Payment;
+
