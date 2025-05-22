@@ -12,6 +12,8 @@ const speakers = [
     title: 'Event Producer',
     company: 'Preston Bailey Events',
     image: '/assets/images/Preston.jpeg',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
   {
     id: 2,
@@ -19,6 +21,8 @@ const speakers = [
     title: 'Creative Director',
     company: 'TY Bello Photography',
     image: '/assets/images/TY.png',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
   {
     id: 3,
@@ -26,6 +30,8 @@ const speakers = [
     title: 'President / CEO',
     company: 'ONE Campaign',
     image: '/assets/images/Ndidi.jpeg',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
   {
     id: 4,
@@ -33,6 +39,8 @@ const speakers = [
     title: 'Founder',
     company: 'David Tutera Experience',
     image: '/assets/images/David.jpg',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
   {
     id: 5,
@@ -40,6 +48,8 @@ const speakers = [
     title: 'Founder / CEO',
     company: 'Zaron Group',
     image: '/assets/images/Oke.webp',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
   {
     id: 6,
@@ -47,6 +57,8 @@ const speakers = [
     title: 'President',
     company: 'MunaLuchi',
     image: '/assets/images/Chike.jpg',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
   {
     id: 7,
@@ -54,6 +66,8 @@ const speakers = [
     title: 'Owner',
     company: 'Marcy Blum Associates',
     image: '/assets/images/Marcy.jpg',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
   {
     id: 8,
@@ -61,6 +75,8 @@ const speakers = [
     title: 'Founder',
     company: 'JamJar',
     image: '/assets/images/Frances.png',
+    topic: 'Designing Dreams: Transforming Spaces with Emotion',
+    bio: 'Preston Bailey is a celebrated floral and event designer known for his ability to transform ordinary spaces into lavish theatrical environments...',
   },
 ];
 

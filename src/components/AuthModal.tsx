@@ -98,7 +98,7 @@ const AuthModal = () => {
                   value={form.firstName}
                   onChange={handleChange}
                   placeholder="First Name"
-                  className="w-1/2 border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+                  className="w-1/2 border border-gray-300 focus:border-[#1B365D] focus:ring-0 rounded px-3 py-2 text-sm transition text-gray-600 focus:outline-none"
                   required
                 />
                 <input
@@ -106,7 +106,7 @@ const AuthModal = () => {
                   value={form.lastName}
                   onChange={handleChange}
                   placeholder="Last Name"
-                  className="w-1/2 border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+                  className="w-1/2 border border-gray-300 focus:border-[#1B365D] focus:ring-0 rounded px-3 py-2 text-sm transition text-gray-600 focus:outline-none"
                   required
                 />
               </div>
@@ -115,7 +115,7 @@ const AuthModal = () => {
                 value={form.company}
                 onChange={handleChange}
                 placeholder="Company Name"
-                className="w-full border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+                className="w-full border border-gray-300 focus:border-[#1B365D] focus:ring-0 rounded px-3 py-2 text-sm transition text-gray-600 focus:outline-none"
                 required
               />
             </>
@@ -127,7 +127,7 @@ const AuthModal = () => {
             value={form.email}
             onChange={handleChange}
             placeholder="Email"
-            className="w-full border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
+            className="w-full border border-gray-300 focus:border-[#1B365D] focus:ring-0 rounded px-3 py-2 text-sm transition text-gray-600 focus:outline-none"
             required
           />
           <input
@@ -136,8 +136,7 @@ const AuthModal = () => {
             value={form.password}
             onChange={handleChange}
             placeholder="Password"
-            className="w-full border border-gray-300 px-3 py-2 rounded text-sm text-gray-600"
-            required
+            className="w-full border border-gray-300 focus:border-[#1B365D] focus:ring-0 rounded px-3 py-2 text-sm transition text-gray-600 focus:outline-none"
           />
 
           <button

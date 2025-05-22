@@ -14,7 +14,7 @@ const SummitFooter = () => {
 
   // Social Links with ARIA labels
   const socialLinks = [
-    { icon: <Instagram size={24} />, url: 'https://instagram.com', label: 'Instagram' },
+    { icon: <Instagram size={24} />, url: 'https://instagram.com/atinuda_', label: 'Instagram' },
     { icon: <Linkedin size={24} />, url: 'https://linkedin.com', label: 'LinkedIn' },
     { icon: <Twitter size={24} />, url: 'https://twitter.com', label: 'Twitter' },
   ];

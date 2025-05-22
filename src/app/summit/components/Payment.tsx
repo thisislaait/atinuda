@@ -7,7 +7,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import AuthModal from '@/components/AuthModal';
-import router from 'next/router';
+import emailjs from 'emailjs-com';
+import { useRouter } from 'next/navigation';
+
+
+// import { signOut } from 'firebase/auth';
+// import { auth } from '@/firebase/config';
+
 
 const ticketOptions = [
   { type: 'Member', price: 25, desc: 'Discounted rate for registered members.' },
@@ -18,6 +24,8 @@ const ticketOptions = [
 const Payment = () => {
   const [selected, setSelected] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+
+   const router = useRouter();
 
   const { user, openAuthModal, logout } = useAuth(); // ✅ added logout
 
@@ -33,7 +41,7 @@ const Payment = () => {
     customer: {
       email: user?.email || 'guest@example.com',
       phone_number: '08012345678',
-      name: user?.displayName || 'Atinuda Guest',
+      name: user?.firstName || 'Atinuda Guest',
     },
     customizations: {
       title: 'Atinuda Ticket',
@@ -145,7 +153,7 @@ const Payment = () => {
             {user && (
               <div className="flex flex-col items-center mb-4 text-black">
                 <p className="text-sm">
-                  Signed in as <strong>{user.displayName || user.email}</strong>
+                  Hello <strong>{user.firstName || user.email?.split('@')[0]}</strong>
                 </p>
                 <button
                   onClick={logout}
@@ -170,18 +178,44 @@ const Payment = () => {
                     callback: (response) => {
                       console.log('Payment success:', response);
                       closePaymentModal();
-                      router.push('/success'); // Create a /success page
+                  
+                      // Send confirmation email
+                      emailjs.send(
+                        'service_0hr9j1c',
+                        'template_lza9v4x',
+                        {
+                          user_name: user?.firstName || 'Guest',
+                          user_email: user?.email,
+                          ticket_type: selected,
+                          ticket_quantity: quantity,
+                          total_amount: totalAmount.toLocaleString(),
+                        },
+                        'UVyr_S1vJexPjIQ2A'
+                      ).then(() => {
+                        console.log('Email sent successfully!');
+                      }).catch((err) => {
+                        console.error('Email sending failed:', err);
+                      });
+                  
+                      router.push('/success'); // Optional redirect
                     },
                     onClose: () => {
-                      console.log('User closed modal');
-                    }
+                      console.log('Payment closed');
+                    },
                   });
+                  
                 }
               }}
               className="relative px-8 py-3 border border-gray-600 text-black font-medium uppercase overflow-hidden group mt-4"
             >
               Proceed to Payment
             </button>
+            {/* <button
+              onClick={() => signOut(auth)}
+              className="text-sm hover:text-red-600 transition relative px-8 py-3 border border-gray-600 text-black font-medium uppercase overflow-hidden group mt-4"
+            >
+              Sign Out
+            </button> */}
           </motion.div>
         )}
       </div>
