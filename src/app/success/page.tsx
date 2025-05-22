@@ -29,7 +29,7 @@ export default function SuccessPage() {
             </div>
             
             {/* Content Section */}
-            <div className="text-3xl md:text-4xl font-serif text-white mb-4 hero-text z-50">
+            <div>
               <h1 className="text-3xl md:text-4xl font-serif text-white mb-4 hero-text">
                 Thank You for Your Purchase
               </h1>
